@@ -1,4 +1,3 @@
-
 class RiseDropProcessor:
 
     def __init__(self, input):
@@ -14,7 +13,10 @@ class RiseDropProcessor:
         self.__result_set = result_set
 
     def __set_intersecting_points(self):
-
+        """
+        This method is used to resolve the intersecting coordinates of the rectangles
+        :return:
+        """
         intersections = [(ele[1], k[2]) for idx, ele in enumerate(self.input) for _i, k in enumerate(self.input)
                          if _i != idx and ele[2] > k[2] and k[0] < ele[1] < k[1]]
         subsume_intersections = [ele for idx, ele in enumerate(intersections) for _i, k in enumerate(intersections)
@@ -23,15 +25,25 @@ class RiseDropProcessor:
         del subsume_intersections
 
     def __set_input_coordinates(self):
-
+        """
+        This methods generates list of coordinates from the input series of
+        rectangle(start x-coordinate, end x-coordinate, height)
+        :return:
+        """
         coord_list = list()
         for i in self.input:
             coord_list.extend(list([(i[0], i[2]), (i[1], 0)]))
         self.result_set.extend(coord_list)
+        del coord_list
 
     def __remove_subsumed_points(self):
-        self.result_set = sorted(sorted(set(self.result_set), key=lambda x: (x[1]), reverse=True), key=lambda x: x[0])
 
+        """
+        This method removes subsumed coordinates of rectangles from inputs to be ignored in result set.
+        :return:
+        """
+        self.result_set = sorted(sorted(set(self.result_set), key=lambda x: (x[1]), reverse=True),
+                                 key=lambda x: x[0])
         subsumed_list = list()
         for idx, ele in enumerate(self.input):
             for _point in self.result_set:
@@ -39,8 +51,13 @@ class RiseDropProcessor:
                     subsumed_list.append(_point)
 
         self.result_set = [_p for _p in self.result_set if _p not in subsumed_list]
+        del subsumed_list
 
     def process_rise_and_drops(self):
+        """
+        This method performs series of operations to find resultant peaks(rise) and dips(drops) for the generated graph.
+        :return: list of rise and drop coordinates
+        """
         self.__set_input_coordinates()
         self.__set_intersecting_points()
         self.__remove_subsumed_points()

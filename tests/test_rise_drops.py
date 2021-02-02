@@ -3,7 +3,6 @@ from services.process_rise_drops import RiseDropProcessor
 
 
 class TestInputs(unittest.TestCase):
-
     OUTPUT_ERROR = 'Output does not match'
 
     def test_1(self):
@@ -23,6 +22,4 @@ class TestInputs(unittest.TestCase):
 
 
 if __name__ == "__main__":
-
     unittest.main()
-
